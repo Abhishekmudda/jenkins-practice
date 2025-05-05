@@ -8,8 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main'
-                    url: 'https://github.com/Abhishekmudda/jenkins-practice.git'
+                git branch: 'main', url: 'https://github.com/Abhishekmudda/jenkins-practice.git'
             }
         }
 
@@ -32,11 +31,11 @@ pipeline {
             }
         }
 
-        stage('Run Pytest') {
+        stage('Run Tests') {
             steps {
                 sh '''
                     . $VENV_DIR/bin/activate
-                    pytest
+                    pytest > result.log
                 '''
             }
         }
@@ -44,11 +43,11 @@ pipeline {
 
     post {
         success {
-            echo '✅ Tests passed!'
+            echo '✅ All tests passed!'
         }
         failure {
-            echo '❌ Tests failed.'
+            echo '❌ Tests failed. Check logs.'
+            sh 'cat result.log || true'
         }
     }
 }
-https://github.com/Abhishekmudda/jenkins-practice.git
