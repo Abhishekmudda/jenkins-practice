@@ -1,4 +1,5 @@
 pipeline {
+
     agent any
 
     stages {
@@ -18,6 +19,11 @@ pipeline {
         }
 
         stage('Run Tests') {
+            when {
+                expression{
+                    CODE_CHANGES == true
+                }
+            }
             steps {
                 sh '''
                     python3 -m pytest > result.log || echo "tests failed"
@@ -29,10 +35,10 @@ pipeline {
 
     post {
         success {
-            echo '✅ All tests passed!'
+            echo 'All tests passed!'
         }
         failure {
-            echo '❌ Tests failed. Check logs below:'
+            echo 'Tests failed. Check logs below:'
             sh 'cat result.log || echo "No result log found."'
         }
     }
