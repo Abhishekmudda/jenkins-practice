@@ -19,11 +19,6 @@ pipeline {
         }
 
         stage('Run Tests') {
-            when {
-                expression{
-                    CODE_CHANGES == true
-                }
-            }
             steps {
                 sh '''
                     python3 -m pytest > result.log || echo "tests failed"
